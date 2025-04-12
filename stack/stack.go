@@ -1,4 +1,4 @@
-package goforge
+package stack
 
 // Stack represents a generic LIFO (last-in, first-out) stack data structure.
 // Elements are added to and removed from the top of the stack.
