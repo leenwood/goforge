@@ -6,11 +6,11 @@ import (
 	"github.com/leenwood/goforge/stack"
 )
 
-func NewQueue[T any]() *queue.Queue[T] {
+func NewQueue[T any]() queue.QueueInterface[T] {
 	return &queue.Queue[T]{}
 }
 
-func NewStack[T any]() *stack.Stack[T] {
+func NewStack[T any]() stack.StackInterface[T] {
 	return &stack.Stack[T]{}
 }
 
