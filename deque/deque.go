@@ -5,38 +5,45 @@ import "errors"
 var ErrEmpty = errors.New("Deque is empty")
 
 type Deque[T any] struct {
-	Buf        []T
+	buf        []T
 	head, tail int
 	size       int
+}
+
+// NewDeque returns a pointer to a new, empty queue.
+func NewDeque[T any]() *Deque[T] {
+	return &Deque[T]{
+		buf: make([]T, InitialCapacity),
+	}
 }
 
 const InitialCapacity = 8
 
 func (d *Deque[T]) grow() {
-	newBuf := make([]T, len(d.Buf)*2)
+	newBuf := make([]T, len(d.buf)*2)
 	for i := 0; i < d.size; i++ {
-		newBuf[i] = d.Buf[(d.head+i)%len(d.Buf)]
+		newBuf[i] = d.buf[(d.head+i)%len(d.buf)]
 	}
-	d.Buf = newBuf
+	d.buf = newBuf
 	d.head = 0
 	d.tail = d.size
 }
 
 func (d *Deque[T]) PushFront(value T) {
-	if d.size == len(d.Buf) {
+	if d.size == len(d.buf) {
 		d.grow()
 	}
-	d.head = (d.head - 1 + len(d.Buf)) % len(d.Buf)
-	d.Buf[d.head] = value
+	d.head = (d.head - 1 + len(d.buf)) % len(d.buf)
+	d.buf[d.head] = value
 	d.size++
 }
 
 func (d *Deque[T]) PushBack(value T) {
-	if d.size == len(d.Buf) {
+	if d.size == len(d.buf) {
 		d.grow()
 	}
-	d.Buf[d.tail] = value
-	d.tail = (d.tail + 1) % len(d.Buf)
+	d.buf[d.tail] = value
+	d.tail = (d.tail + 1) % len(d.buf)
 	d.size++
 }
 
@@ -45,8 +52,8 @@ func (d *Deque[T]) PopFront() (T, bool) {
 		var zero T
 		return zero, false
 	}
-	val := d.Buf[d.head]
-	d.head = (d.head + 1) % len(d.Buf)
+	val := d.buf[d.head]
+	d.head = (d.head + 1) % len(d.buf)
 	d.size--
 	return val, true
 }
@@ -56,8 +63,8 @@ func (d *Deque[T]) PopBack() (T, bool) {
 		var zero T
 		return zero, false
 	}
-	d.tail = (d.tail - 1 + len(d.Buf)) % len(d.Buf)
-	val := d.Buf[d.tail]
+	d.tail = (d.tail - 1 + len(d.buf)) % len(d.buf)
+	val := d.buf[d.tail]
 	d.size--
 	return val, true
 }
@@ -67,7 +74,7 @@ func (d *Deque[T]) Front() (T, bool) {
 		var zero T
 		return zero, false
 	}
-	return d.Buf[d.head], true
+	return d.buf[d.head], true
 }
 
 func (d *Deque[T]) Back() (T, bool) {
@@ -75,14 +82,14 @@ func (d *Deque[T]) Back() (T, bool) {
 		var zero T
 		return zero, false
 	}
-	return d.Buf[(d.tail-1+len(d.Buf))%len(d.Buf)], true
+	return d.buf[(d.tail-1+len(d.buf))%len(d.buf)], true
 }
 
 func (d *Deque[T]) Len() int {
 	return d.size
 }
 
-func (d *Deque[T]) Empty() bool {
+func (d *Deque[T]) IsEmpty() bool {
 	return d.size == 0
 }
 
@@ -90,5 +97,5 @@ func (d *Deque[T]) Clear() {
 	d.head = 0
 	d.tail = 0
 	d.size = 0
-	d.Buf = make([]T, InitialCapacity)
+	d.buf = make([]T, InitialCapacity)
 }

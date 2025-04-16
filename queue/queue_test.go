@@ -7,7 +7,7 @@ import (
 func testPush[T comparable](t *testing.T, values []T) {
 	q := NewQueue[T]()
 	for _, v := range values {
-		q.Push(v)
+		q.Enqueue(v)
 	}
 	if q.Len() != len(values) {
 		t.Errorf("Push: expected len %d, got %d", len(values), q.Len())
@@ -17,15 +17,15 @@ func testPush[T comparable](t *testing.T, values []T) {
 func testPop[T comparable](t *testing.T, values []T) {
 	q := NewQueue[T]()
 	for _, v := range values {
-		q.Push(v)
+		q.Enqueue(v)
 	}
 	for _, expected := range values {
-		val, ok := q.Pop()
+		val, ok := q.Dequeue()
 		if !ok || val != expected {
 			t.Errorf("Pop: expected %v, got %v (ok=%v)", expected, val, ok)
 		}
 	}
-	_, ok := q.Pop()
+	_, ok := q.Dequeue()
 	if ok {
 		t.Error("Pop: expected false on empty queue")
 	}
@@ -33,9 +33,9 @@ func testPop[T comparable](t *testing.T, values []T) {
 
 func testPeek[T comparable](t *testing.T, value T) {
 	q := NewQueue[T]()
-	q.Push(value)
+	q.Enqueue(value)
 
-	val, ok := q.Peek()
+	val, ok := q.Front()
 	if !ok || val != value {
 		t.Errorf("Peek: expected %v, got %v (ok=%v)", value, val, ok)
 	}
@@ -44,8 +44,8 @@ func testPeek[T comparable](t *testing.T, value T) {
 		t.Errorf("Peek: expected queue to remain unchanged, got len %d", q.Len())
 	}
 
-	q.Pop()
-	_, ok = q.Peek()
+	q.Dequeue()
+	_, ok = q.Front()
 	if ok {
 		t.Error("Peek: expected false on empty queue")
 	}
@@ -54,7 +54,7 @@ func testPeek[T comparable](t *testing.T, value T) {
 func testClear[T comparable](t *testing.T, values []T) {
 	q := NewQueue[T]()
 	for _, v := range values {
-		q.Push(v)
+		q.Enqueue(v)
 	}
 	q.Clear()
 	if !q.IsEmpty() {

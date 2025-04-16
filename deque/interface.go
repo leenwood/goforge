@@ -1,8 +1,14 @@
 package deque
 
+import "github.com/leenwood/goforge/base"
+
 // DequeInterface represents a double-ended queue, allowing efficient insertion
 // and removal of elements from both the front and the back.
+//
+// It extends ContainerInterface to support basic inspection and control methods.
 type DequeInterface[T any] interface {
+	base.ContainerInterface[T]
+
 	// PushFront adds an element to the front of the Deque.
 	PushFront(value T)
 
@@ -24,13 +30,4 @@ type DequeInterface[T any] interface {
 	// Back returns the element at the back of the Deque without removing it.
 	// The second return value is false if the Deque is empty.
 	Back() (T, bool)
-
-	// Len returns the number of elements in the Deque.
-	Len() int
-
-	// Empty reports whether the Deque is empty.
-	Empty() bool
-
-	// Clear removes all elements from the Deque.
-	Clear()
 }

@@ -22,14 +22,14 @@ func NewQueue[T any]() *Queue[T] {
 	return &Queue[T]{}
 }
 
-// Push adds an item to the back of the queue.
-func (q *Queue[T]) Push(item T) {
+// Enqueue adds an item to the back of the queue.
+func (q *Queue[T]) Enqueue(item T) {
 	q.data = append(q.data, item)
 }
 
-// Pop removes and returns the front item of the queue.
+// Dequeue removes and returns the front item of the queue.
 // If the queue is empty, returns the zero value of T and false.
-func (q *Queue[T]) Pop() (T, bool) {
+func (q *Queue[T]) Dequeue() (T, bool) {
 	var zero T
 	if len(q.data) == 0 {
 		return zero, false
@@ -39,9 +39,9 @@ func (q *Queue[T]) Pop() (T, bool) {
 	return item, true
 }
 
-// Peek returns the front item of the queue without removing it.
+// Front returns the front item of the queue without removing it.
 // If the queue is empty, returns the zero value of T and false.
-func (q *Queue[T]) Peek() (T, bool) {
+func (q *Queue[T]) Front() (T, bool) {
 	var zero T
 	if q.IsEmpty() {
 		return zero, false
